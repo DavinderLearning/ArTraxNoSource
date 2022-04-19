@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - LoadTracMobile</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+    <script src="~/Scripts/jquery-1.8.3.min.js"></script>
+    <script>
+        $(document).bind("mobileinit", function () {
+            $.mobile.pageLoadErrorMessage = "behn de take";
+            $.mobile.defaultDialogTransition = "flip";
+            //$.mobile.ajaxEnabled = false;
+        });
+    </script>
+
+    <script src="~/Scripts/jquery.mobile-1.2.0.min.js"></script>
+    <script>
+        $(document).bind("pagehide", function (e) {
+            $(e.target).remove();
+        });
+
+    </script>
+    <link href="~/Content/MobileSite.css" rel="stylesheet" />
+    <link href="~/Content/jquery.mobile-1.2.0.min.css" rel="stylesheet" />
+    <link href="~/Content/jquery.mobile.theme-1.2.0.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div data-role="page">
+       <div data-role="header" class="ui-bar ui-bar-e">
+           LoadMobile - @ViewBag.Title
+           </div>
+            @*<h2><a href="/Customer/IndexMobile/" >LoadT.M2</a></h2>
+            <a href="/Customer/IndexMobile/" data-icon="home" data-iconpos="notext" >Home</a>*@
+            
+            @*<div data-role="navbar">
+                <ul>                    
+                    <li><a href="@Url.Content("/Customer/")">Customers</a></li>
+                    <li><a href="@Url.Content("~/Home/About")">About</a></li>                                       
+                </ul>
+            </div>*@
+       @* </div>*@
+        @RenderBody()
+
+    </div>
+    
+</body>
+</html>

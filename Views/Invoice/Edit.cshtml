@@ -1,0 +1,486 @@
+﻿@model Invoice
+@{
+    ViewBag.Title = "Invoice Edit " + Model.InvoiceNumber.ToString();
+}
+<script src="~/Scripts/kendo/2012.3.1114/kendo.web.min.js"></script>
+<link href="~/Content/kendo/2012.3.1114/kendo.common.min.css" rel="stylesheet" />
+<link href="~/Content/kendo/2012.3.1114/kendo.metro.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui-1.10.0.min.js"></script>
+<link href="~/Content/themes/base/jquery.ui.theme.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jQuery.tmpl.js"></script>
+<script src="~/Scripts/_Index.js"></script>
+<script src="~/Scripts/_DataServiceCaller.js"></script>
+
+<div>
+
+    <table>
+        <tr>
+            <td>
+                <div id="dvCustomerInfo" class="k-block k-info-colored"></div>
+                <div id="progressbar"></div>
+               
+            </td>
+            <td>
+                <div id="dvInvoiceInfo" class="right k-block k-info-colored"></div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="dvCreateTicket"></div>
+
+<style>
+    /*override main content*/
+    .main-content {
+        background: url("../Images/accent.png") no-repeat;
+        padding-left: 10px;
+        padding-top: 0px;
+        margin-left: 20px;
+    }
+</style>
+<div style="vertical-align: top; margin-left: 0px;">
+
+    <div id="tabstrip">
+        <ul>
+            <li class="k-state-active">Invoice Lines </li>
+            <li>Tickets Available</li>
+            <li>Payments</li>
+        </ul>
+        <div>
+
+            <input type="button" id="removeSelectedItemsFromInvoice" value="Remove" onclick="removeTicketFromInvoice()" />
+            <input type="button" id="addSelectedItemsToInvoice_removeAll" value="Remove All" onclick="removeAll();" />
+            <input id="txtCustomerId" value="@Model.CustomerId" class="hideField" />
+            <div id="gridInvoiceLines" class="gridTickets"></div>
+        </div>
+        <div>
+            <input type="button" id="addSelectedItemsToInvoice" value="Add" onclick="addTicketToInvoice()" />
+            <input type="button" id="addSelectedItemsToInvoice_selectAll" value="Add All" onclick="selectAll();" />
+            <div id="gridTickets" class="gridTickets"></div>
+        </div>
+        <div >
+            <table>
+                <tr>
+                    <td style="vertical-align: top;" >
+                        <div   id="gridPayments" class="gridPayments"></div>
+                    </td>
+                    <td>
+                        <table>
+                            <tr >
+                                <td>
+                                    <input type="button" id="btnApplypayment" onclick="recordPayment();" value="Apply Payment" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Check Number</td>
+                                <td>
+                                    <input type="text" id="txtPayment_CheckNumber" /></td>
+                            </tr>
+                            <tr>
+                                <td>Note</td>
+                                <td>
+                                    <input type="text" id="txtPayment_Note" /></td>
+                            </tr>
+                            <tr>
+                                <td>Date </td>
+                                <td>
+                                    <input type="date" id="txtPayment_PaymentDate" /></td>
+                            </tr>
+                            <tr>
+                                <td>Amount</td>
+                                <td>
+                                    <input type="number" id="txtPayment_Amount" />
+                                    <input type="button" id="btnPaymentApplyBalance" onclick="applyBalancePayment();" value="Apply Remaining Balance" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Id Deduction</td>
+                                <td>
+                                    <input type="checkbox" id="txtPayment_IsDeduction" /></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<script>    
+    $(document).ready(function () {        
+        $("#tabstrip").kendoTabStrip({
+            animation: {
+                open: {
+                    effects: "fadeIn"
+                }
+            }
+        });  
+        var progressbar = $("#progressbar")
+        progressbar.progressbar();
+        progressbar.hide();
+        
+        //$( "#progressbar" ).progressbar({
+        //    value: false
+        //});
+        //$('#processing')
+        //    .hide()  // hide it initially
+        //    .ajaxStart(function() {
+        //        $(this).show();
+        //    })
+        //    .ajaxStop(function() {
+        //        $(this).hide();
+        //    })
+        //;
+
+        $("#txtPayment_PaymentDate").kendoDatePicker();
+        refreshListing();
+        getData("/Customer/Get?pId=" + @Model.CustomerId + "",showCustomerInfo);
+        //$.getJSON("/Customer/Get?pId=" + @Model.CustomerId + "", function (data) { showCustomerInfo(data) });
+    
+    });
+    function progress() {
+        var progressbar = $("#progressbar");        
+        progressbar.show();
+        var val = progressbar.progressbar("value") || 0;
+        progressbar.progressbar("value", val + 1);
+        if (val < 99) {
+            setTimeout(progress, 20);
+        }
+        else//completed
+        {
+            progressbar.hide();
+            //long awaiting process done 
+            refreshListing();
+        }
+    }
+    function showCustomerInfo(data)
+    {
+        $("#dvCustomerInfo").empty();
+        $("#templCustomer").tmpl(data).appendTo("#dvCustomerInfo");
+    }
+    function showInvoiceInfo(data)
+    {
+        $("#dvInvoiceInfo").empty();
+        $("#templInvoice").tmpl(data).appendTo("#dvInvoiceInfo");
+        //last event of refreshing now hide the progress
+        //showProcessing(false);
+    }
+    function refreshListing() {
+        //  progressbar = $( "#progressbar" );
+        // setTimeout( progress, 3000 );
+       // showProcessing(true);
+        loadOpenTickets();
+        loadInvoicedTickets(@Model.Id);
+        loadPayments();
+        recalc();
+    }
+    function recalc() {
+        getData("/Invoice/Recalc?pInvoiceId=" + @Model.Id + "",showInvoiceInfo);        
+    }
+    //revisit this later wtih totals
+    function addTicketToInvoice(){
+        var data;
+        for (var i = 0; i < selectedDataItems.length; i++) {
+            data= {InvoiceId: @Model.Id
+                    , Id: selectedDataItems[i].Id }
+            postData("/InvoiceLine/AddLineToInvoice",data, function(){});
+        }    
+        postData("/InvoiceLine/AddLineToInvoice",data,showProcessing(false));
+        refreshListing();
+    };   
+    function removeTicketFromInvoice(){
+        for (var i = 0; i < selectedDataItemsInvoice.length; i++) {
+            var data=  { InvoiceId: @Model.Id
+                        , Id: selectedDataItemsInvoice[i].Id };
+            postData("/InvoiceLine/RemoveLineFromInvoice",data,refreshListing);
+        }        
+    }
+    function selectAll(){
+        var data;
+        for (var i = 0; i < invoiceLinesAvailableData.length; i++) {
+             data= {InvoiceId: @Model.Id
+                    , Id: invoiceLinesAvailableData[i].Id }
+            postData("/InvoiceLine/AddLineToInvoice",data,function(){});
+        }   
+        $("#progressbar").progressbar("value",0);
+        setTimeout(progress, 1000);        
+    };  
+    function removeAll(){
+        var data;
+        for (var i = 0; i < invoiceLinesData.length; i++) {
+            data= {InvoiceId: @Model.Id
+                    , Id: invoiceLinesData[i].Id }
+            postData("/InvoiceLine/RemoveLineFromInvoice",data,function(){});
+        }   
+        $("#progressbar").progressbar("value",0);
+        setTimeout(progress, 1000);        
+    };  
+    function recordPayment(){
+        var data= {  Id:0
+            ,InvoiceId: @Model.Id
+                , CheckNumber: $("#txtPayment_CheckNumber").val()
+                , Note: $("#txtPayment_Note").val()
+                , PaymentDate: $("#txtPayment_PaymentDate").val()
+                , Amount: $("#txtPayment_Amount").val()                
+                , IsDeduction: $("#txtPayment_IsDeduction").is(':checked')            
+        }
+        postData( "/InvoicePayment/CreateJ",data,refreshListing);                  
+        refreshListing();
+        }    
+        function loadPayments() {        
+            var url = "/InvoicePayment/GetInvoicePayments?InvoiceId=" + @Model.Id + "";
+            getData(url,loadPaymentsCallback);
+        };
+        function loadPaymentsCallback(data)
+        {
+            $("#gridPayments").kendoGrid({
+                dataSource:data,
+                columns: [
+                    {
+                        field: "Id",
+                        title: " ",
+                        width: 60,
+                        template: "<div class='k-button k-grid-delete' onclick=deletePayment(#= kendo.toString(Id)#)  style='min-width:16px;'><span class='k-icon k-delete'></span></div>"
+                    }
+                    , {field: "Id"}
+                      
+                    , {
+                        field: "PaymentDate", title: "Date"
+                        , width: 120
+                        , template: '#= kendo.toString(new Date(parseInt(PaymentDate.replace(/[A-Za-z$--/]/g, ""))),"MM/dd/yyyy") #'
+                    }
+                    , { field: "CheckNumber", title: "Check#" }
+                    , { field: "Amount", title: "Payment($)",  format: "{0:c}" }
+                    , { field: "Note", title: "Note" ,width:"200px"}
+                ]
+                   , selectable: "row"                  
+                //put the selected item in the selected item collection           
+            }).data("kendoGrid");
+        }
+        function applyBalancePayment()
+        {
+            getData("/Invoice/Recalc?pInvoiceId=" + @Model.Id + "",applyBalancePaymentCallback);
+            
+        }
+    function applyBalancePaymentCallback(data)
+    {        
+        //alert(data.Balance);
+        txtPayment_Amount.value=data.Balance;
+     }
+    function formatPrice(price) {
+        return kendo.format("{0:c}",price);
+        //return kendo.culture("en-US"); kendo.toString(price, "c");
+        //return "$" + price.toFixed(2);
+    }
+    function printInvoice()
+    {
+        var url="http://win7r/Reportserver_SQLEXPRESS2022/?%2fLoadTracReporting%2fInvoice&rs:Command=Render&InvoiceId=" + @Model.Id + "&rc:Parameters=false";       
+        window.open(url);
+    }
+    function deletePayment(pId) {
+        //$.getJSON("/InvoiceLine/Get?pId=" + pTicketId, function (data) { showDeleteTicketDialog(data) });
+        //getData("/InvoicePayment/Get?pId=" + pId, showDeleteTicketDialog);
+        if(confirm("Are you sure want to delete this payment (id: " + pId +") ?"))
+        {
+            postDeletePayment(pId);
+        }
+        
+    }   
+
+    //#region 
+    ///call the server method for ticket deletion
+    function postDeletePayment(pId)
+    {
+        //call the post method for delete
+        //$.ajax({
+        //    type: 'POST',
+        //    url: "/InvoicePayment/Delete",
+        //    cache: false,
+        //    data: {
+        //        Id: pId
+        //    }
+        //});
+        //refreshListing();
+        var url = "/InvoicePayment/Delete";
+        var data = {Id: pId};
+        postData(url,data,refreshListing);
+        
+    }
+
+</script>
+<script type="text/html" id="templCustomer">
+    <table>
+        <tr>
+            <th colspan="4">${CustomerName}
+            </th>
+        </tr>
+        <tr>
+            <td>Address</td>
+            <td>${AddressLine1}</td>
+
+            <td></td>
+            <td>${AddressLine2}</td>
+            <td>
+                <input type="button" id="btnPrintInvoice" onclick="printInvoice();" value="Print Invoice" /></td>
+        </tr>
+        <tr>
+            <td>City</td>
+            <td>${City}</td>
+
+            <td>Main Contact</td>
+            <td>${MainContact}</td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td>${EmailAddress}</td>
+
+            <td>Phone</td>
+            <td>${Phone}</td>
+        </tr>
+        <tr>
+            <td>Cell</td>
+            <td>${Cell}</td>
+            <td>Fax</td>
+            <td>${Fax}</td>
+        </tr>
+    </table>
+</script>
+<script type="text/html" id="templInvoice">
+    <table>
+        <tr>
+            <td>
+                <table>
+                    <tr>
+                        <td>Subtototal</td>
+                        <td  class="invoiceTotals">${formatPrice(Subtotal)}</td>
+                       
+                    </tr>
+                    <tr>
+                        <td>${TaxRate}% ${TaxName} </td>
+                        <td class="invoiceTotals">${formatPrice(TaxAmount)}</td>
+                    </tr>
+                    <tr>
+                        <td>Total</td>
+                        <td class="invoiceTotals">${formatPrice(Total)}</td>
+                    </tr>
+                    <tr>
+                        <td>Payments</td>
+                        <td class="invoiceTotals">${formatPrice(Total-Balance)}</td>
+                    </tr>
+                    <tr>
+                        <td>Balance</td>
+                        <td class="invoiceTotals">${formatPrice(Balance)}</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</script>
+<script type="text/html" id="templDeleteTicket">
+    <table>
+        <tr>
+            <td colspan="2">
+                <input type="button" id="btnDeleteTicket" value="Delete" onclick="postDeleteTicket(); loadOpenTickets();" />
+                <input type="text" id="txtDeleteTicketId" value="${Id}" class="hideField" />
+            </td>
+        </tr>
+        <tr>
+            <td>Ticket No.</td>
+            <td>
+                <input type="text" value="${TicketNumber}" />
+            </td>
+        </tr>
+        <tr class="altRowColor">
+            <td>Description</td>
+            <td>
+                <input type="datetime" value="${Description}" /></td>
+        </tr>
+        <tr>
+            <td>Quantity</td>
+            <td>
+                <input type="number" value="${Quantity}" /></td>
+        </tr>
+        <tr class="altRowColor">
+            <td>Price</td>
+            <td>
+                <input type="number" value="${Price}" />
+            </td>
+        </tr>
+        <tr>
+            <td>Taxable</td>
+            <td>
+                <input type="checkbox" checked="${IsLineTaxable}" />
+            </td>
+        </tr>
+    </table>
+</script>
+
+
+<script type="text/html" id="templTicket">
+    <table>
+        <tr>
+            <td colspan="2">
+                <input type="button" id="btnSaveTicket" value="Save" onclick="postEditTicket(); " />
+                <input type="text" id="txtTicketId" value="0" class="hideField" />
+            </td>
+        </tr>
+        <tr class="altRowColor">
+            <td>Date</td>
+            <td>
+                <input id="txtTicketCreate_Date" />
+            </td>
+        </tr>
+        <tr>
+            <td>Ticket No.</td>
+            <td>
+                <input type="text" id="txtTicketCreate_TicketNumber" value="${TicketNumber}" />
+            </td>
+        </tr>
+        <tr class="altRowColor">
+            <td>Truck</td>
+            <td>
+                <input id="cboTruck" />
+            </td>
+        </tr>
+        <tr>
+            <td>Equip</td>
+            <td>
+                <input id="cboEquip" />
+            </td>
+        </tr>
+        <tr class="altRowColor">
+            <td>Type</td>
+            <td>
+                <input id="cboLoadType" />
+            </td>
+        </tr>
+        <tr>
+            <td>Product</td>
+            <td>
+                <input id="cboProduct" />
+            </td>
+        </tr>
+        <tr class="altRowColor">
+            <td>Description</td>
+            <td>
+                <input type="datetime" id="txtTicketCreate_Description" value="${Description}" /></td>
+        </tr>
+        <tr>
+            <td>Quantity</td>
+            <td>
+                <input type="number" id="txtTicketCreate_Quantity" value="${Quantity}" /></td>
+        </tr>
+        <tr class="altRowColor">
+            <td>Price</td>
+            <td>
+                <input type="number" id="txtTicketCreate_Price" value="${Price}" /></td>
+        </tr>
+        <tr>
+            <td>Taxable</td>
+            <td>
+                <input type="checkbox" id="txtTicketCreate_Taxable" checked="${IsLineTaxable}" />
+            </td>
+        </tr>
+    </table>
+</script>
+
+

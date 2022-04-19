@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>LoadTrac 4.1 -  @ViewBag.Title </title>
+        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width" />
+        
+        @Scripts.Render("~/bundles/modernizr")
+        <link href="~/Content/Site.css" rel="stylesheet" />     
+        <link href="~/Content/myCss.css" rel="stylesheet" />       
+
+
+        @Scripts.Render("~/bundles/jquery")
+
+    </head>
+    <body>
+        <header>
+            <div class="content-wrapper">
+                <div class="float-left">
+                    <p class="site-title">@Html.ActionLink("ArTrax 4.1", "Index", "Customer")</p>
+                </div>
+                <div class="float-right">
+                    <section id="login">
+                        @Html.Partial("_LoginPartial")
+                    </section>
+                    <nav>
+                        <ul id="menu">
+                            @*<li>@Html.ActionLink("Home", "Index", "Home")</li>*@
+                            <li>@Html.ActionLink("Home", "Index", "Customer")</li>
+                            <li>@Html.ActionLink("Trucks ", "Index", "Truck")</li>
+                            <li>@Html.ActionLink("Products ", "Index", "Product")</li>
+
+                            <li><a href="http://win7r/ReportServer_sqlExpress2022/Pages/ReportViewer.aspx?%2fLoadTracReporting%2fTruckerStatement&rs:Command=Render" >Trucker Report</a> </li>
+                            <li>@Html.ActionLink("Setup ", "Edit", "SystemSetting",new {id=1},"")</li>
+                        </ul> 
+                    </nav>
+                </div>
+            </div>
+        </header>
+        <div id="body">
+            @RenderSection("featured", required: false)
+            <section class="content-wrapper main-content clear-fix">
+                @RenderBody()
+            </section>
+        </div>
+        <footer>
+            <div class="content-wrapper">
+                <div class="float-left">
+                    <p>LoadTrac 4.1   - &copy; @DateTime.Now.Year </p>
+                </div>
+            </div>
+        </footer>
+
+        
+        @RenderSection("scripts", required: false)
+    </body>
+</html>

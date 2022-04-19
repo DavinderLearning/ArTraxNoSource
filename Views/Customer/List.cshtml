@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Customer>
+
+@{
+    ViewBag.Title = "Index2";
+}
+
+<script>
+    $(document).ready(function () {
+        $('tr').click(function () {
+            // alert('i am clicked');
+            var value = $(this).attr('id');
+            alert(value)
+            window.opener.GetValueFromChild(value);
+            //alert('closing the window');
+            self.close();
+            //alert('cloedg the window');
+        
+        }).hover(function () {
+            $(this).toggleClass('hover');
+        });
+    });
+
+</script>
+<style>
+    tr.hover {
+        cursor: pointer;
+        background-color: Highlight;
+        color: white;
+        font-weight: bold;
+        /* whatever other hover styles you want */
+    }
+</style>
+<table>
+    <tr class="indexTableHeaders">
+        <th>
+            @Html.ActionLink("Name", "Index2", new { sortOrder = "CustomerName", currentFilter = ViewBag.CurrentFilter })
+        </th>        
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr id="@item.Id">
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerName)
+            </td>            
+
+        </tr>
+    }
+
+</table>

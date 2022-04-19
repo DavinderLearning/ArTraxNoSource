@@ -1,0 +1,116 @@
+﻿@model InvoiceLine
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>InvoiceLine</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.InvoiceId)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.InvoiceId)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.CustomerId)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CustomerId)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.TicketEquip.Name)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TicketEquip.Name)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.TicketLoadType.Name)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TicketLoadType.Name)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.TicketTruck.Name)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TicketTruck.Name)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.AddToInvoice)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.AddToInvoice)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.TicketProduct.Name)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TicketProduct.Name)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.TicketDate)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TicketDate)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.TicketNumber)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TicketNumber)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Description)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Description)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Quantity)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Quantity)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Price)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Price)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.IsLineTaxable)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.IsLineTaxable)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.ExtendedAmount)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ExtendedAmount)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}

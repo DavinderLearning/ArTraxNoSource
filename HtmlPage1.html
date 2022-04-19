@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+<script src="Scripts/jquery-1.8.3.js"></script>
+<!--<script src="Scripts/kendo/2012.3.1114/kendo.web.min.js"></script>   
+<link href="Content/kendo/2012.3.1114/kendo.common.min.css" rel="stylesheet" />
+<link href="Content/kendo/2012.3.1114/kendo.metro.min.css" rel="stylesheet" />-->
+
+    <script src="Scripts/jquery-ui-1.10.0.min.js"></script>
+<link href="Content/themes/base/jquery.ui.theme.css" rel="stylesheet" />
+<link href="Content/themes/base/jquery-ui.css" rel="stylesheet" />
+
+
+    <script>
+        $(document).ready(function () {
+            //alert('ready');
+            //$("#txtTicketCreate_Date").kendoDatePicker();
+
+            
+            //progressbar.progressbar({
+            //    value: false,
+            //    change: function () {
+            //        progressLabel.text(progressbar.progressbar("value") + "%");
+            //    },
+            //    complete: function () {
+            //        progressLabel.text("Complete!");
+            //    }
+            //});
+
+            var progressbar = $("#progressbar")
+            progressbar.progressbar({disabled:true });
+            function progress() {
+                progressbar.show();
+                var val = progressbar.progressbar("value") || 0;
+                progressbar.progressbar("value", val + 1);
+                if (val < 99) {
+                    setTimeout(progress, 10);
+                }
+                else//completed
+                    progressbar.hide();
+
+            }
+            //setTimeout(progress, 3000);
+            //start after one second
+            setTimeout(progress, 1000);
+            
+        });
+        
+    </script>
+
+</head>
+
+<body>
+    <div>
+        Set Date  <input id="txtTicketCreate_Date" value="10/10/2001" />
+    </div>
+        
+              <div id="progressbar"></div>
+        
+          
+</body>
+</html>

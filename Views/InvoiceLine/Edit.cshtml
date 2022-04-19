@@ -1,0 +1,49 @@
+﻿@model InvoiceLine
+
+@{
+    ViewBag.Title = "Edit Ticket Id " + @Model.Id;
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)    
+    <fieldset>
+        <legend>InvoiceLine</legend>
+        <!-- main fields -->
+
+        <input type="text" value="@Model.TicketDate" name="TicketDate" id="TicketDate"  placeholder="Ticket Date" />
+        <input type="text" placeholder="Ticket#" value="@Model.TicketNumber" id="TicketNumber" name="TicketNumber" />
+
+        <div class="editor-field">
+            @Html.DropDownList("TruckId", String.Empty)
+            @Html.ValidationMessageFor(model => model.TruckId)
+        </div>       
+        
+             @Html.DropDownList("EquipId", String.Empty)
+            @Html.DropDownList("LoadTypeId", String.Empty)
+         
+
+
+        <input type="text" id="Description" placeholder="Description" name="Description"  value="@Model.Description" />
+        @Html.ValidationMessageFor(model => model.Description)
+
+        <input type="number" id="Quantity" placeholder="Quantity" name="Quantity"  value="@Model.Quantity" />
+        @Html.ValidationMessageFor(model => model.Quantity)
+
+
+        <input type="number" id="Price" placeholder="Price" name="Price" value="@Model.Price" />
+        @Html.ValidationMessageFor(model => model.Price)
+        <p>
+            <a href="#" data-icon="check" data-role="button" data-mini="true" onclick="$(this).closest('form').submit()">Save</a>
+        </p>
+        <div >
+            @Html.EditorFor(model => model.InvoiceId)
+            @Html.EditorFor(model => model.CustomerId)
+            @Html.EditorFor(model => model.Id)
+            @Html.EditorFor(model => model.AddToInvoice)
+            @Html.EditorFor(model => model.ProductId)
+        </div>
+    </fieldset>
+}

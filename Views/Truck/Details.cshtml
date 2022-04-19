@@ -1,0 +1,36 @@
+﻿@model Truck
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Truck</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Name)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Name)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.ShortCode)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ShortCode)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.IsContractor)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.IsContractor)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,53 @@
+﻿@model Truck
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2> Edit Truck</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Truck</legend>
+
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Name)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ShortCode)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ShortCode)
+            @Html.ValidationMessageFor(model => model.ShortCode)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.IsContractor)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.IsContractor)
+            @Html.ValidationMessageFor(model => model.IsContractor)
+        </div>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

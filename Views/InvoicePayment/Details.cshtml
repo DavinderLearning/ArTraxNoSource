@@ -1,0 +1,57 @@
+﻿@model InvoicePayment
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>InvoicePayment</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.InvoiceId)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.InvoiceId)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.CheckNumber)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CheckNumber)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.IsDedection)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.IsDedection)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Note)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Note)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.PaymentDate)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PaymentDate)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Amount)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Amount)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

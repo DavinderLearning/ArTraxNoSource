@@ -1,0 +1,26 @@
+﻿@model IEnumerable<InvoiceLine>
+
+<div data-role="listview" data-theme="c" data-content-theme="d" data-mini="true" data-filter="true">
+
+    @foreach (var item in Model)
+    {
+        <div data-role="collapsible">
+            <h3>@Html.DisplayFor(modelItem => item.TicketNumber)</h3>
+
+            <a data-mini="true" data-role="button"  href="@Url.Action("EditM", "InvoiceLine", new { id = item.Id })" target="_blank">Edit Ticket</a>
+            <table>
+                <caption>Ticket Info</caption>
+                <tr><td>Date</td><td>@item.TicketDate.ToShortDateString()</td></tr>
+                <tr><td>Truck</td><td>@item.TicketTruck.Name</td></tr>
+                <tr><td>Equip</td><td>@item.TicketEquip.Name</td></tr>
+                <tr><td>Type</td><td>@item.TicketLoadType.Name</td></tr>
+                <tr><td>Desc</td><td>@item.Description</td></tr>
+                <tr><td>Quantity</td><td>@item.Quantity.ToString()</td></tr>
+                <tr><td>Price</td><td>@item.Price.ToString()</td></tr>
+                <tr><td>Price</td><td>@item.Price.ToString()</td></tr>
+                <tr><td>Ext</td><td>@item.ExtendedAmount.ToString()</td></tr>
+            </table>
+        </div>       
+    }
+</div>
+

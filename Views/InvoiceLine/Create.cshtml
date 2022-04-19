@@ -1,0 +1,108 @@
+﻿@model InvoiceLine
+@{
+    ViewBag.Title = "Create Ticket";
+}
+<script src="~/Scripts/_DataServiceCaller.js"></script>
+<script>
+
+    $(document).ready(function () {
+        var url = "/Customer/Get?pId=" + @Model.CustomerId
+       getData(url, showCustomerNameCallback);
+    });
+    function showCustomerNameCallback(data) {
+        $("#txtCustomerName").val(data.CustomerName);
+    }
+
+</script>
+ <div data-role="header">
+       <input type="text" id="txtCustomerName"  />      
+ </div>
+<div>
+    @*<a href="@Url.Action("Index", new { pCustomerId = @Model.CustomerId }) " data-icon="back" data-role="button" data-mini="true" >View Listing</a>*@
+</div>
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)    
+    <fieldset>
+        <legend>InvoiceLine</legend>
+        <!-- main fields -->
+        <input type="date" value="@Model.TicketDate" name="TicketDate" id="TicketDate"  placeholder="Ticket Date" />
+
+        <input type="text" placeholder="Ticket#" value="@Model.TicketNumber" id="TicketNumber" name="TicketNumber" />
+        <div class="editor-field">
+            @Html.DropDownList("TruckId", String.Empty)
+            @Html.ValidationMessageFor(model => model.TruckId)
+        </div>
+        @* <div data-role="fieldcontain">
+            <div class="editor-label">
+                @Html.LabelFor(model => model.EquipId, "TicketEquip")
+            </div>
+            <div class="editor-field">
+                @Html.DropDownList("EquipId", String.Empty)
+                @Html.ValidationMessageFor(model => model.EquipId)
+            </div>
+        </div>*@
+        @*<div data-role="fieldcontain">
+            <div class="editor-label">
+                @Html.LabelFor(model => model.LoadTypeId, "TicketLoadType")
+            </div>
+            <div class="editor-field">
+                @Html.DropDownList("LoadTypeId", String.Empty)
+                @Html.ValidationMessageFor(model => model.LoadTypeId)
+            </div>*@
+        <fieldset data-role="controlgroup" data-type="horizontal">
+            <legend></legend>
+            <input data-mini="true" type="radio" name="EquipId" id="radio-choice-210" value="1" />
+            <label for="radio-choice-210">Truck</label>
+            <input data-mini="true" type="radio" name="EquipId" id="radio-choice-220" value="2" />
+            <label for="radio-choice-220">TnP</label>
+            <input data-mini="true" type="radio" name="EquipId" id="radio-choice-221" value="3" />
+            <label for="radio-choice-221">TnT</label>
+            <input data-mini="true" type="radio" name="EquipId" id="radio-choice-222" value="4" />
+            <label for="radio-choice-222">4XL</label>
+        </fieldset>
+        <fieldset data-role="controlgroup" data-type="horizontal">
+            <legend></legend>
+            <input data-mini="true" type="radio" name="LoadTypeId" id="radio-choice-21" value="1" />
+            <label for="radio-choice-21">Load</label>
+            <input data-mini="true" type="radio" name="LoadTypeId" id="radio-choice-22" value="2" />
+            <label for="radio-choice-22">Hours</label>
+            <input data-mini="true" type="radio" name="LoadTypeId" id="radio-choice-23" value="3" />
+            <label for="radio-choice-23">Tons</label>
+            <input data-mini="true" type="radio" name="LoadTypeId" id="radio-choice-24" value="4" />
+            <label for="radio-choice-24">DF</label>
+            <input data-mini="true" type="radio" name="LoadTypeId" id="radio-choice-25" value="5" />
+            <label for="radio-choice-25">Misc</label>
+            <input data-mini="true" type="radio" name="LoadTypeId" id="radio-choice-26" value="6" />
+            <label for="radio-choice-26">Toll</label>
+        </fieldset>
+
+
+        <input type="text" id="Description" placeholder="Description" name="Description" />
+        @Html.ValidationMessageFor(model => model.Description)
+
+        <input type="number" id="Quantity" placeholder="Quantity" name="Quantity" onclick="this.select();" />
+        @Html.ValidationMessageFor(model => model.Quantity)
+
+
+        <input type="number" id="Price" placeholder="Price" name="Price" />
+        @Html.ValidationMessageFor(model => model.Price)
+
+
+        @*<div class="editor-field">
+            @Html.EditorFor(model => model.IsLineTaxable)
+            @Html.ValidationMessageFor(model => model.IsLineTaxable)
+        </div>*@
+        <p>
+            <a href="#" data-icon="check" data-role="button" data-mini="true" onclick="$(this).closest('form').submit()">Save</a>
+        </p>
+        <div class="hideField" style="visibility: hidden">
+            @Html.EditorFor(model => model.InvoiceId)
+            @Html.EditorFor(model => model.AddToInvoice)
+            @Html.EditorFor(model => model.ProductId)
+                        
+            
+        </div>
+            @Html.EditorFor(model => model.CustomerId)
+    </fieldset>
+}
