@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32319.34
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "ArTraxNoSource", "..\..\..\..\..\dev\ArTraxNoSource\", "{42ECA7AE-580B-42C5-B1AA-214C67DAD2DF}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_64680"
+		Debug.AspNetCompiler.PhysicalPath = "..\..\..\..\..\dev\ArTraxNoSource\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_64680\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_64680"
+		Release.AspNetCompiler.PhysicalPath = "..\..\..\..\..\dev\ArTraxNoSource\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_64680\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "64680"
+		SlnRelativePath = "..\..\..\..\..\dev\ArTraxNoSource\"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{42ECA7AE-580B-42C5-B1AA-214C67DAD2DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42ECA7AE-580B-42C5-B1AA-214C67DAD2DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {721AE37D-0F82-42A7-8494-57ACF4939255}
+	EndGlobalSection
+EndGlobal
