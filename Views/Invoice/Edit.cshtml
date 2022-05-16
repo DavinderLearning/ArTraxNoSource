@@ -273,7 +273,7 @@
     }
     function printInvoice()
     {
-        var url="http://win7r/Reportserver_SQLEXPRESS2022/?%2fLoadTracReporting%2fInvoice&rs:Command=Render&InvoiceId=" + @Model.Id + "&rc:Parameters=false";       
+        var url="http://raitrucking/Reportserver/?%2fLoadTracReporting%2fInvoice&rs:Command=Render&InvoiceId=" + @Model.Id + "&rc:Parameters=false";       
         window.open(url);
     }
     function deletePayment(pId) {
